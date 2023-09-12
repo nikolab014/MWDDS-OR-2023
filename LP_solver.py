@@ -49,16 +49,16 @@ def solver(G):
     #solving
     prob.solve(PULP_CBC_CMD( maxSeconds=60, msg=False, fracGap=0))
 
-    #izvuci cvorove i particije kao lista listi
-    variable_values = {(i, j): x[i, j].varValue for i in nodes_list for j in range(1, m + 2)}
-    result = [[] for _ in range(m + 1)]
-    for i in nodes_list:
-        for j in range(1, m + 2):
-            if variable_values[i, j] == 1:
-                result[j - 1].append(i)
-
+    #izvuci cvorove da se vidi koji su u kojoj particiji (za potrebe provjere)
+    #variable_values = {(i, j): x[i, j].varValue for i in nodes_list for j in range(1, m + 2)}
+    #result = [[] for _ in range(m + 1)]
+    #for i in nodes_list:
+    #    for j in range(1, m + 2):
+    #        if variable_values[i, j] == 1:
+    #            result[j - 1].append(i)
+    result = value(prob.objective)
     # suma min cvorova
-    print("Objective value:", value(prob.objective))
+    print("Objective value:", result)
 
     return result
 
