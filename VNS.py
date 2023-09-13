@@ -9,6 +9,9 @@ def initial_domatic_partition(G):
     # domatic_partition = [[0,2,4,6], [1,3,5]]
     return domatic_partition
 
+def objective_function(G, solution):
+    total_weight = sum(min(G.nodes[node]['lifetime'] for node in ds) for ds in solution)
+    return total_weight
 
 def shake(G, solution, k):
     if not solution:
@@ -61,13 +64,14 @@ def local_search(G, solution):
 def vns(G, max_iterations, k_max):
     solution = initial_domatic_partition(G)
     best_solution = solution.copy()
-    best_value = sum(min(G.nodes[node]['lifetime'] for node in ds) for ds in best_solution)
+    #best_value = sum(min(G.nodes[node]['lifetime'] for node in ds) for ds in best_solution)
+    best_value = objective_function(G, best_solution)
     for _ in range(max_iterations):
         k = 1
         while k <= k_max:
             s_prime = shake(G, solution.copy(), k)
             s_double_prime = local_search(G, s_prime)
-            s_double_prime_value = sum(min(G.nodes[node]['lifetime'] for node in ds) for ds in s_double_prime)
+            s_double_prime_value =  objective_function(G, s_double_prime)
             if s_double_prime_value > best_value:
                 best_solution = s_double_prime
                 best_value = s_double_prime_value
@@ -75,7 +79,7 @@ def vns(G, max_iterations, k_max):
             else:
                 k += 1
         solution = best_solution
-    return best_solution
+    return best_value
 
 if __name__ == '__main__':
     G = random_weighted_graph(10)

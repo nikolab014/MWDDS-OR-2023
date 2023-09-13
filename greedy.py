@@ -11,8 +11,12 @@ def whitescore(G, v, colors):
             score += 1
     score *= G.nodes[v]["lifetime"]
     return score
-
-
+def objective_function(D, G):
+    total_weight = 0
+    for dominating_set in D:
+        min_lifetime = min(G.nodes[v]["lifetime"] for v in dominating_set)
+        total_weight += min_lifetime
+    return total_weight
 def ghmwdds(G):
     D = []
     Vrem = set(G.nodes)
@@ -44,5 +48,5 @@ def ghmwdds(G):
 
 if __name__ == '__main__':
     G = random_weighted_graph(10)
-    result = ghmwdds(G)
+    result =objective_function(ghmwdds(G), G)
     print(result)
