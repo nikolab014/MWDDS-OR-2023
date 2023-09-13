@@ -5,7 +5,7 @@ import time
 from Graph_gen import *
 from VNS import vns
 from LP_solver import solver
-from greedy import ghmwdds
+from greedy import *
 
 
 def func1(arg):
@@ -17,7 +17,7 @@ def func2(arg):
 
 
 def func3(arg):
-    return ghmwdds(arg)
+    return objective_function(ghmwdds(arg), arg)
 
 
 def benchmark_function(func, args_list):
