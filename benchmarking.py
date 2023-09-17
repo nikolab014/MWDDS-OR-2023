@@ -2,7 +2,8 @@ import networkx as nx
 import random
 import pandas as pd
 import time
-from Graph_gen import *
+#from Graph_gen import *
+from fast_graph_gen import *
 from VNS import vns
 from LP_solver import solver
 from greedy import *
@@ -13,7 +14,7 @@ def func1(arg):
 
 
 def func2(arg):
-    return vns(arg,100,10)
+    return vns(arg,100,3)
 
 
 def func3(arg):
@@ -52,9 +53,7 @@ def benchmark_function(func, args_list):
 
 
 def main():
-    num_graphs = 10
-    num_nodes = 10
-    args_list = create_list_of_random_graphs(num_graphs, num_nodes)
+    args_list = create_list_of_random_graphs()
 
     functions = [func1, func2, func3]  # Solveri
 
