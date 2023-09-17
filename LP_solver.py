@@ -1,3 +1,4 @@
+path_to_cplex = r'C:\Program Files\IBM\ILOG\CPLEX_Studio221\cplex\bin\x64_win64\cplex.exe'
 from pulp import *
 import networkx as nx
 from Graph_gen import random_weighted_graph
@@ -11,6 +12,7 @@ def solver(G):
 
     # defining the problem
     prob = LpProblem("Objective_function", LpMaximize)
+
 
     #define problem variables
     x = {(i, j): LpVariable(cat=LpBinary, name=f'x_{i}_{j}') for i in nodes_list for j in range(1, m + 2)} #idk jedino ovako radi vidi mozes li skontati nesto drugo
@@ -47,7 +49,8 @@ def solver(G):
         prob += z[j] >= z[j + 1]
 
     #solving
-    prob.solve(PULP_CBC_CMD( maxSeconds=60, msg=False, fracGap=0))
+    solver = CPLEX_CMD(timelimit=600,msg=False,path=path_to_cplex)
+    prob.solve(solver)
 
     #izvuci cvorove da se vidi koji su u kojoj particiji (za potrebe provjere)
     #variable_values = {(i, j): x[i, j].varValue for i in nodes_list for j in range(1, m + 2)}
@@ -58,8 +61,9 @@ def solver(G):
     #            result[j - 1].append(i)
     result = value(prob.objective)
     # suma min cvorova
-    print("Objective value:", result)
+    #print("Objective value:", result)
 
+    #print("lp solved")
     return result
 
 if __name__ == '__main__':
